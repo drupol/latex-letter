@@ -11,7 +11,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, nix-filter, aaronwolen-pandoc-letter,... }@inputs:
+  outputs = { self, nixpkgs, flake-utils, nix-filter, aaronwolen-pandoc-letter, ... }@inputs:
     let
       overlay = nixpkgs: final: prev: {
         pandoc-letter-template = final.stdenvNoCC.mkDerivation {
