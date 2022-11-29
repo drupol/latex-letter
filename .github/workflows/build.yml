@@ -33,7 +33,7 @@ jobs:
     release:
         name: "Create tag/pre-release"
         runs-on: ubuntu-latest
-        needs: [dependencies, build]
+        needs: [build]
         outputs:
             upload_url: ${{ steps.create_release.outputs.upload_url }}
         steps:
