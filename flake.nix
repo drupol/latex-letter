@@ -28,7 +28,6 @@
 
           installPhase = ''
             runHook preInstall
-            mkdir -p $out
 
             install -m644 -D $src/template-letter.tex --target $out/share/pandoc/templates/
 
@@ -81,8 +80,7 @@
           installPhase = ''
             runHook preInstall
 
-            mkdir -p $out
-            cp template/letter.pdf $out/
+            install -m644 -D letter.pdf --target $out/
 
             runHook postInstall
           '';
