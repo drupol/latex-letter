@@ -1,0 +1,7 @@
+/.direnv/
+/build/
+/.vscode/
+/out/
+*.bak*
+indent.log
+/result
