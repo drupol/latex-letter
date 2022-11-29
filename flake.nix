@@ -80,7 +80,7 @@
           installPhase = ''
             runHook preInstall
 
-            install -m644 -D letter.pdf --target $out/
+            install -m644 -D template/letter.pdf --target $out/
 
             runHook postInstall
           '';
@@ -89,6 +89,7 @@
       {
         # Nix shell / nix build
         packages.default = pkgs.pandoc-letter-template;
+        packages.letter = letter;
 
         # Nix develop
         devShells.default = pkgs.mkShellNoCC {
