@@ -3,15 +3,30 @@ name: Build
 on: [push]
 
 jobs:
+    dependencies:
+        name: Build dependencies
+        runs-on: ubuntu-latest
+        outputs:
+            version: ${{ steps.version.outputs.version }}
+
+        steps:
+            - name: Check out source files
+              uses: actions/checkout@v3
+
+            - name: Create global variables
+              id: version
+              run: echo "version=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
     build:
         name: Build PDF files
         runs-on: ubuntu-latest
+        needs: [dependencies]
 
         steps:
             - name: Set git to use LF
               run: |
-                  git config --global core.autocrlf false
-                  git config --global core.eol lf
+                git config --global core.autocrlf false
+                git config --global core.eol lf
 
             - name: Check out source files
               uses: actions/checkout@v3
@@ -21,14 +36,14 @@ jobs:
 
             - name: Build letter
               run: |
-                  nix build .#letter --quiet
-                  cp result/letter.pdf letter.pdf
+                nix build .#letter --quiet
+                cp result/letter.pdf letter.pdf
 
             - name: Upload build assets
               uses: actions/upload-artifact@v3
               with:
-                  name: assets
-                  path: letter.pdf
+                name: assets
+                path: letter.pdf
 
     release:
         name: "Create tag/pre-release"
@@ -41,12 +56,12 @@ jobs:
               id: create_release
               uses: actions/create-release@v1
               env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
-                  tag_name: v${{ github.run_number }}-${{ needs.dependencies.outputs.version }}
-                  release_name: Version ${{ github.run_number }} (${{ needs.dependencies.outputs.version }})
-                  draft: false
-                  prerelease: true
+                tag_name: v${{ github.run_number }}-${{ needs.dependencies.outputs.version }}
+                release_name: Version ${{ github.run_number }} (${{ needs.dependencies.outputs.version }})
+                draft: false
+                prerelease: true
 
     assets:
         name: Upload release assets
@@ -57,15 +72,15 @@ jobs:
             - name: Download build assets (${{ matrix.assets.input }})
               uses: actions/download-artifact@v3
               with:
-                  name: assets
-                  path: assets
+                name: assets
+                path: assets
 
             - name: Upload release assets
               uses: actions/upload-release-asset@v1
               env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
-                  upload_url: ${{ needs.release.outputs.upload_url }}
-                  asset_path: assets/letter.pdf
-                  asset_name: ${{ github.run_number }}--roa--${{ needs.dependencies.outputs.version }}.pdf
-                  asset_content_type: application/pdf
+                upload_url: ${{ needs.release.outputs.upload_url }}
+                asset_path: assets/letter.pdf
+                asset_name: ${{ github.run_number }}--roa--${{ needs.dependencies.outputs.version }}.pdf
+                asset_content_type: application/pdf
