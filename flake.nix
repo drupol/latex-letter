@@ -85,6 +85,7 @@
       in
       {
         packages.default = wrapper;
+        packages.letter = letter;
 
         # Nix develop
         devShells.default = pkgs.mkShellNoCC {
