@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    nix-filter.url = github:numtide/nix-filter;
+    nix-filter.url = "github:numtide/nix-filter";
     aaronwolen-pandoc-letter = {
       url = "github:aaronwolen/pandoc-letter";
       flake = false;
@@ -16,14 +16,7 @@
       overlay = nixpkgs: final: prev: {
         pandoc-letter-template = final.stdenvNoCC.mkDerivation {
           name = "pandoc-letter-template";
-
-          src = final.fetchFromGitHub {
-            owner = "aaronwolen";
-            repo = "pandoc-letter";
-            rev = "b0fd7342b352ebb87aea17614ec014f68d48747f";
-            sha256 = "6GTTncMvoMjEXdqzdtc/LYsZOzBMcrh2vlQBWpLeyKA=";
-          };
-
+          src = aaronwolen-pandoc-letter;
           dontBuild = true;
 
           installPhase = ''
