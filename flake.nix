@@ -78,11 +78,13 @@
             runHook postInstall
           '';
         };
+
+        wrapper = pkgs.writeShellScriptBin "latex-letter-app" ''
+          ${pandoc}/bin/pandoc $1 --from markdown --to latex -s --template=${pkgs.pandoc-letter-template}/share/pandoc/template-letter.tex -o $1.pdf
+        '';
       in
       {
-        # Nix shell / nix build
-        packages.default = pkgs.pandoc-letter-template;
-        packages.letter = letter;
+        packages.default = wrapper;
 
         # Nix develop
         devShells.default = pkgs.mkShellNoCC {

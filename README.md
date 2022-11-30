@@ -6,6 +6,13 @@ Letter Pandoc template of [Aaron Wolen][aaron wolen], see the
 
 Find an example of letter in [the latest release][latest release] section.
 
+## Quick start
+
+You have two options:
+
+1. Use `nix run github:drupol/latex-letter -- /path/to/file.md`
+2. Create a project from a template: `nix flake new --template github:drupol/latex-letter#default ./my-new-document`
+
 ## Usage
 
 Create a new letter by creating a new project:
