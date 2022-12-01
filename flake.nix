@@ -87,6 +87,7 @@
           '';
           runtimeInputs = [ tex ];
         };
+        packages.letter = letter;
 
         # Nix develop
         devShells.default = pkgs.mkShellNoCC {
