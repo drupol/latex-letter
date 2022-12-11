@@ -32,6 +32,19 @@ Bonjour monsieur,
 felis justo, eget tincidunt urna cursus a. Duis in nibh ac metus pellentesque
 tristique.
 
+You can render *LaTeX* mathematical expressions using [**MathJax**](https://www.mathjax.org/),
+as on [math.stackexchange.com](https://math.stackexchange.com/). Examples:
+
+* The Euler's identity: $e^{i\pi} + 1 = 0$
+* The solution of $f(x)=ax^2+bx+c$ where $a \neq 0$ and $a, b, c \in R$ is
+$$
+x = {-b \pm \sqrt{b^2-4ac} \over 2a}
+$$
+* The *Gamma function*: $\Gamma(n) = \begin{cases}
+  \displaystyle (n-1)!\quad\forall n\in\mathbb N\\
+  \displaystyle \int_0^\infty t^{n-1}e^{-t}dt\quad\forall n\in\mathbb R^*_+
+  \end{cases}$
+
 > Integer interdum ligula non aliquam pellentesque. Etiam vitae diam tincidunt,
 > tincidunt erat nec, sollicitudin leo. Sed eleifend vehicula metus nec commodo.
 
@@ -41,9 +54,21 @@ vestibulum, id feugiat tortor volutpat. _Proin pharetra tellus quis tellus
 posuere interdum_. Sed felis nisi, posuere non eleifend ac, convallis et velit.
 ~~Morbi~~ fermentum justo sapien, eget mollis tellus hendrerit quis.
 
+| Heading 1          |     Heading 2      |          Heading 3 |
+| ------------------ | :----------------: | -----------------: |
+| This is Contents 1 | This is Contents 2 | This is Contents 3 |
+| This is Contents 1 | This is Contents 2 | This is Contents 3 |
+| This is Contents 1 | This is Contents 2 | This is Contents 3 |
+| This is Contents 1 | This is Contents 2 | This is Contents 3 |
+| This is Contents 1 | This is Contents 2 | This is Contents 3 |
+
 Quisque massa purus, consectetur sollicitudin malesuada vitae, ultrices vitae
 enim. Nullam aliquet sodales cursus. Nam id imperdiet sem, vitae egestas odio.
 Cras faucibus bibendum sapien at vehicula. Morbi eget rhoncus elit. Vestibulum
 vitae orci vestibulum, dapibus urna et, rhoncus sem. Nam tincidunt metus magna,
 vel luctus tellus tincidunt et. Duis varius dolor et ex eleifend, eget interdum
-felis posuere. Pellentesque a ante at massa ullamcorper tempus eget ac tortor.
+felis posuere. Pellentesque[^1] a ante at massa ullamcorper tempus eget ac tortor.
+
+You can also render plain \LaTeX\ if you want to !
+
+[^1]: This is the first footnote.
