@@ -95,6 +95,7 @@
           buildInputs = [
             tex
             pandoc
+            pkgs.nodePackages.prettier
             pkgs.nixpkgs-fmt
             pkgs.nixfmt
           ];
