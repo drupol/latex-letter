@@ -48,11 +48,19 @@ $$
 > Integer interdum ligula non aliquam pellentesque. Etiam vitae diam tincidunt,
 > tincidunt erat nec, sollicitudin leo. Sed eleifend vehicula metus nec commodo.
 
+- [ ] ToDos
+  - [x] Buy some salad
+  - [ ] Brush teeth
+  - [x] Drink some water
+  - [ ] **Click my box** and see the source code, if you're allowed to edit!
+
 In venenatis dolor nec eros interdum, quis finibus nisi aliquam. Vestibulum
 porta arcu et diam lacinia vulputate. Morbi vehicula turpis sed magna
 vestibulum, id feugiat tortor volutpat. _Proin pharetra tellus quis tellus
 posuere interdum_. Sed felis nisi, posuere non eleifend ac, convallis et velit.
 ~~Morbi~~ fermentum justo sapien, eget mollis tellus hendrerit quis.
+
+Table: Test Table
 
 | Heading 1          |     Heading 2      |          Heading 3 |
 | ------------------ | :----------------: | -----------------: |
@@ -70,5 +78,7 @@ vel luctus tellus tincidunt et. Duis varius dolor et ex eleifend, eget interdum
 felis posuere. Pellentesque[^1] a ante at massa ullamcorper tempus eget ac tortor.
 
 You can also render plain \LaTeX\ if you want to !
+
+___
 
 [^1]: This is the first footnote.
