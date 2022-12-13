@@ -78,6 +78,10 @@ vitae orci vestibulum, dapibus urna et, rhoncus sem. Nam tincidunt metus magna,
 vel luctus tellus tincidunt et. Duis varius dolor et ex eleifend, eget interdum
 felis posuere. Pellentesque[^1] a ante at massa ullamcorper tempus eget ac tortor.
 
+\begin{center}
+\includegraphics{example-image}
+\end{center}
+
 You can also render plain \LaTeX\ if you want to !
 
 ___
