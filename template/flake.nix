@@ -21,12 +21,16 @@
           ];
         };
 
-        pandoc = pkgs.writeShellScriptBin "pandoc" ''
-          ${pkgs.pandoc}/bin/pandoc --data-dir ${pkgs.pandoc-letter-template}/share/pandoc/ $@
-        '';
-
         tex = pkgs.texlive.combine {
           inherit (pkgs.texlive) scheme-full latex-bin latexmk;
+        };
+
+        pandoc = pkgs.writeShellApplication {
+          name = "pandoc";
+          text = ''
+            ${pkgs.pandoc}/bin/pandoc --data-dir=${pkgs.pandoc-letter-template}/share/pandoc/ "$@"
+          '';
+          runtimeInputs = [ tex ];
         };
 
         letter = pkgs.stdenvNoCC.mkDerivation {
