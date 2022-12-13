@@ -23,8 +23,8 @@ signature-before: 0ex
 signature-after: 0ex
 closing-indentation: 0em
 links-as-notes: true
-colorlinks: true
-#fontfamily: garamondlibre
+colorlinks: false
+fontfamily: garamondlibre
 ...
 
 Bonjour monsieur,
