@@ -24,6 +24,7 @@ signature-after: 0ex
 closing-indentation: 0em
 links-as-notes: true
 colorlinks: true
+#fontfamily: garamondlibre
 ...
 
 Bonjour monsieur,
