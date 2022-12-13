@@ -4,14 +4,13 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    nix-filter.url = "github:numtide/nix-filter";
     aaronwolen-pandoc-letter = {
       url = "github:aaronwolen/pandoc-letter";
       flake = false;
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, nix-filter, aaronwolen-pandoc-letter, ... }@inputs:
+  outputs = { self, nixpkgs, flake-utils, aaronwolen-pandoc-letter, ... }@inputs:
     let
       overlay = nixpkgs: final: prev: {
         pandoc-letter-template = final.stdenvNoCC.mkDerivation {
@@ -35,7 +34,7 @@
       # nix flake new --template templates#default ./my-new-document
       templates.default = {
         path = ./template;
-        description = "A template for creating letter document from Markdown.";
+        description = "A template for creating beautiful letters with Pandoc.";
       };
     } //
     flake-utils.lib.eachDefaultSystem (system:
@@ -47,12 +46,16 @@
           inherit system;
         };
 
-        pandoc = pkgs.writeShellScriptBin "pandoc" ''
-          ${pkgs.pandoc}/bin/pandoc --data-dir ${pkgs.pandoc-letter-template}/share/pandoc/ $@
-        '';
-
         tex = pkgs.texlive.combine {
           inherit (pkgs.texlive) scheme-full latex-bin latexmk;
+        };
+
+        pandoc = pkgs.writeShellApplication {
+          name = "pandoc";
+          text = ''
+            ${pkgs.pandoc}/bin/pandoc --data-dir=${pkgs.pandoc-letter-template}/share/pandoc/ "$@"
+          '';
+          runtimeInputs = [ tex ];
         };
 
         letter = pkgs.stdenvNoCC.mkDerivation {
@@ -80,14 +83,19 @@
         };
       in
       {
-        packages.default = pkgs.writeShellApplication {
-          name = "latex-letter-app";
-          text = ''
-            ${pkgs.pandoc}/bin/pandoc --from markdown --to latex -s --template=${pkgs.pandoc-letter-template}/share/pandoc/templates/template-letter.tex -o letter.pdf "$@"
-          '';
-          runtimeInputs = [ tex ];
+        packages = {
+          default = pkgs.writeShellApplication {
+            name = "latex-letter-app";
+            text = ''
+              ${pandoc}/bin/pandoc -s --template=template-letter.tex -o letter.pdf "$@"
+            '';
+            runtimeInputs = [ tex ];
+          };
+
+          letter = letter;
+
+          pandoc = pandoc;
         };
-        packages.letter = letter;
 
         # Nix develop
         devShells.default = pkgs.mkShellNoCC {
