@@ -34,7 +34,7 @@
         };
 
         letter = pkgs.stdenvNoCC.mkDerivation {
-          name = "latex-letter";
+          name = "pandoc-letter";
 
           src = pkgs.lib.cleanSource ./.;
 
@@ -55,10 +55,34 @@
             runHook postInstall
           '';
         };
+
+        letter-scrlttr2 = pkgs.stdenvNoCC.mkDerivation {
+          name = "pandoc-letter-scrlttr2";
+
+          src = pkgs.lib.cleanSource ./.;
+
+          nativeBuildInputs = [
+            pandoc
+            tex
+          ];
+
+          build = ''
+            make build-letter-scrlttr2
+          '';
+
+          installPhase = ''
+            runHook preInstall
+
+            install -m644 -D letter.pdf --target $out/
+
+            runHook postInstall
+          '';
+        };
       in
       {
         # Nix shell / nix build
-        packages.default = letter;
+        packages.letter = letter;
+        packages.letter-scrlttr2 = letter-scrlttr2;
 
         # Nix develop
         devShells.default = pkgs.mkShellNoCC {
