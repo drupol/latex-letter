@@ -18,7 +18,7 @@ fontsize: 12pt
 papersize: A4
 geometry: margin=3cm
 blockquote: true
-signature: ./src/letter1/signature.pdf
+signature: ./src/letter/signature.pdf
 signature-width: 7cm
 signature-before: 0ex
 signature-after: 0ex

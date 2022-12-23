@@ -1,21 +1,5 @@
 {
   "nodes": {
-    "aaronwolen-pandoc-letter": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1597167010,
-        "narHash": "sha256-6GTTncMvoMjEXdqzdtc/LYsZOzBMcrh2vlQBWpLeyKA=",
-        "owner": "aaronwolen",
-        "repo": "pandoc-letter",
-        "rev": "b0fd7342b352ebb87aea17614ec014f68d48747f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "aaronwolen",
-        "repo": "pandoc-letter",
-        "type": "github"
-      }
-    },
     "flake-utils": {
       "locked": {
         "lastModified": 1667395993,
@@ -29,19 +13,6 @@
         "owner": "numtide",
         "repo": "flake-utils",
         "type": "github"
-      }
-    },
-    "jenserat-pandoc-scrlttr2": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1671805452,
-        "narHash": "sha256-oGNc/zfU32gwjKEchsyyPNtyIAzJDHoN8FnKLRaYbl0=",
-        "path": "/home/pol/Code/drupol/pandoc-scrlttr2",
-        "type": "path"
-      },
-      "original": {
-        "path": "/home/pol/Code/drupol/pandoc-scrlttr2",
-        "type": "path"
       }
     },
     "nixpkgs": {
@@ -60,12 +31,44 @@
         "type": "github"
       }
     },
+    "pandoc-letter": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1597167010,
+        "narHash": "sha256-6GTTncMvoMjEXdqzdtc/LYsZOzBMcrh2vlQBWpLeyKA=",
+        "owner": "aaronwolen",
+        "repo": "pandoc-letter",
+        "rev": "b0fd7342b352ebb87aea17614ec014f68d48747f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "aaronwolen",
+        "repo": "pandoc-letter",
+        "type": "github"
+      }
+    },
+    "pandoc-scrlttr2": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1671806090,
+        "narHash": "sha256-UaQRJnNf6CyAAOLCQxaN4nkCXF4YfGiDpLbhm2p/Heo=",
+        "owner": "drupol",
+        "repo": "pandoc-scrlttr2",
+        "rev": "d28a7ebafefccef54391cc4d739383e4ea51b680",
+        "type": "github"
+      },
+      "original": {
+        "owner": "drupol",
+        "repo": "pandoc-scrlttr2",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
-        "aaronwolen-pandoc-letter": "aaronwolen-pandoc-letter",
         "flake-utils": "flake-utils",
-        "jenserat-pandoc-scrlttr2": "jenserat-pandoc-scrlttr2",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "pandoc-letter": "pandoc-letter",
+        "pandoc-scrlttr2": "pandoc-scrlttr2"
       }
     }
   },
