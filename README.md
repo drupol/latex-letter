@@ -3,9 +3,8 @@
 This is a repository of [Nix package expressions][nix homepage] for creating
 beautiful letters using Pandoc/LaTeX. Pandoc templates in use are:
 
-1. [Aaron Wolen][aaron wolen] at [repository][pandoc letter].
-2. Custom `scrlttr2` letter template adapted from the one of [Jens
-   Erat][jens erat] at [repository][scrlttr2 repository] .
+1. [Latex letter][pandoc letter] from [Aaron Wolen][aaron wolen], using LaTeX `letter` class.
+2. [Custom template][scrlttr2 repository] adapted from the one of [Jens Erat][jens erat], using LaTeX `scrlttr2` class. This template is a mix between the one from Aaron and Jens.
 
 Find an example of letter in [the latest release][latest release] section.
 
@@ -15,8 +14,8 @@ You have two options:
 
 1. Do not start a full project and use `nix run` to compile a PDF from a
    Markdown file:
-   1. `nix run github:drupol/latex-letter#letter -- /path/to/file.md`
-   2. `nix run github:drupol/latex-letter#letter-scrlttr2 -- /path/to/file.md`
+   1. `nix run github:drupol/latex-letter#letter -- /path/to/letter.md -o letter.pdf`
+   2. `nix run github:drupol/latex-letter#letter-scrlttr2 -- /path/to/letter.md -o letter.pdf`
 2. Scaffold a full project from a default template:
    `nix flake new --template github:drupol/latex-letter#default ./my-new-document`
 
@@ -53,7 +52,8 @@ This package is contains a `flake.nix` which exposes its derivations in an
 
 Exposed derivations:
 
-- `pandoc-letter-template`: The derivation of the Pandoc letter template
+- `pandoc-letter-template`: The derivation of the Pandoc `letter` template
+- `pandoc-letter-scrlttr2-template`: The derivation of the Pandoc letter `scrlttr2` template
 
 To use it in your own package, here's a minimum working example:
 
