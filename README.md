@@ -1,8 +1,11 @@
 # LaTeX Letter
 
-This is a repository of [Nix package expressions][nix homepage] for the LaTeX
-Letter Pandoc template of [Aaron Wolen][aaron wolen], see the
-[template repository][pandoc letter].
+This is a repository of [Nix package expressions][nix homepage] for creating
+beautiful letters using Pandoc/LaTeX. Pandoc templates in use are:
+
+1. [Aaron Wolen][aaron wolen] at [repository][pandoc letter].
+2. Custom `scrlttr2` letter template adapted from the one of [Jens
+   Erat][jens erat] at [repository][scrlttr2 repository] .
 
 Find an example of letter in [the latest release][latest release] section.
 
@@ -10,8 +13,12 @@ Find an example of letter in [the latest release][latest release] section.
 
 You have two options:
 
-1. Use `nix run github:drupol/latex-letter -- /path/to/file.md`
-2. Create a project from a template: `nix flake new --template github:drupol/latex-letter#default ./my-new-document`
+1. Do not start a full project and use `nix run` to compile a PDF from a
+   Markdown file:
+   1. `nix run github:drupol/latex-letter#letter -- /path/to/file.md`
+   2. `nix run github:drupol/latex-letter#letter-scrlttr2 -- /path/to/file.md`
+2. Scaffold a full project from a default template:
+   `nix flake new --template github:drupol/latex-letter#default ./my-new-document`
 
 ## Usage
 
@@ -97,3 +104,5 @@ To use it in your own package, here's a minimum working example:
 [aaron wolen]: https://github.com/aaronwolen
 [pandoc letter]: https://github.com/aaronwolen/pandoc-letter
 [latest release]: https://github.com/drupol/latex-letter/releases/latest
+[jens erat]: https://github.com/JensErat/
+[scrlttr2 repository]: https://github.com/drupol/pandoc-scrlttr2
