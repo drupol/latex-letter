@@ -137,9 +137,21 @@
       in
       {
         packages = {
-          letter = letter;
-          letter-scrlttr2 = letter-scrlttr2;
           pandoc = pandoc;
+          letter = pkgs.writeShellApplication {
+            name = "pandoc-letter-app";
+            text = ''
+              ${pandoc}/bin/pandoc -s --template=letter.tex "$@"
+            '';
+            runtimeInputs = [ tex ];
+          };
+          letter-scrlttr2 = pkgs.writeShellApplication {
+            name = "pandoc-letter-scrlttr2-app";
+            text = ''
+              ${pandoc}/bin/pandoc -s --template=scrlttr2.tex "$@"
+            '';
+            runtimeInputs = [ tex ];
+          };
         };
 
         # Nix develop
