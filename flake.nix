@@ -4,42 +4,44 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    aaronwolen-pandoc-letter = {
+    pandoc-letter = {
       url = "github:aaronwolen/pandoc-letter";
       flake = false;
     };
-    benedicdudel-pandoc-letter = {
-      url = "https://github.com/benedictdudel/pandoc-letter-din5008";
+    pandoc-scrlttr2 = {
+      url = "github:drupol/pandoc-scrlttr2";
       flake = false;
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, aaronwolen-pandoc-letter, benedicdudel-pandoc-letter, ... }@inputs:
+  outputs = { self, nixpkgs, flake-utils, pandoc-letter, pandoc-scrlttr2, ... }@inputs:
     let
       overlay = nixpkgs: final: prev: {
         pandoc-letter-template = final.stdenvNoCC.mkDerivation {
           name = "pandoc-letter-template";
-          src = aaronwolen-pandoc-letter;
+          src = pandoc-letter;
           dontBuild = true;
 
           installPhase = ''
             runHook preInstall
 
-            install -m644 -D $src/template-letter.tex --target $out/share/pandoc/templates/letter.tex
+            mkdir -p $out/share/pandoc/templates/
+            cp $src/template-letter.tex $out/share/pandoc/templates/letter.tex
 
             runHook postInstall
           '';
         };
 
-        pandoc-letter-din5008-template = final.stdenvNoCC.mkDerivation {
-          name = "pandoc-letter-din5008-template";
-          src = benedicdudel-pandoc-letter;
+        pandoc-letter-scrlttr2-template = final.stdenvNoCC.mkDerivation {
+          name = "pandoc-letter-scrlttr2-template";
+          src = pandoc-scrlttr2;
           dontBuild = true;
 
           installPhase = ''
             runHook preInstall
 
-            install -m644 -D $src/letter.latex --target $out/share/pandoc/templates/letter-din5008.tex
+            mkdir -p $out/share/pandoc/templates/
+            cp $src/scrlttr2.latex $out/share/pandoc/templates/scrlttr2.tex
 
             runHook postInstall
           '';
@@ -68,10 +70,19 @@
           inherit (pkgs.texlive) scheme-full latex-bin latexmk;
         };
 
+        pandoc-templates = pkgs.symlinkJoin {
+          name = "pandoc-templates";
+
+          paths = [
+            pkgs.pandoc-letter-scrlttr2-template
+            pkgs.pandoc-letter-template
+          ];
+        };
+
         pandoc = pkgs.writeShellApplication {
           name = "pandoc";
           text = ''
-            ${pkgs.pandoc}/bin/pandoc --data-dir=${pkgs.pandoc-letter-template}/share/pandoc/ "$@"
+            ${pkgs.pandoc}/bin/pandoc --data-dir=${pandoc-templates}/share/pandoc/ "$@"
           '';
           runtimeInputs = [ tex ];
         };
@@ -100,8 +111,8 @@
           '';
         };
 
-        letter-din5008 = pkgs.stdenvNoCC.mkDerivation {
-          name = "latex-letter-din5008";
+        letter-scrlttr2 = pkgs.stdenvNoCC.mkDerivation {
+          name = "latex-letter-scrlttr2";
 
           src = pkgs.lib.cleanSource ./.;
 
@@ -112,7 +123,7 @@
           ];
 
           buildPhase = ''
-            make -C template build-letter-din5008
+            make -C template build-letter-scrlttr2
           '';
 
           installPhase = ''
@@ -127,8 +138,7 @@
       {
         packages = {
           letter = letter;
-          letter-din5008 = letter-din5008;
-
+          letter-scrlttr2 = letter-scrlttr2;
           pandoc = pandoc;
         };
 
@@ -142,6 +152,12 @@
             pkgs.nixpkgs-fmt
             pkgs.nixfmt
           ];
+        };
+
+        checks = {
+          letter = letter;
+          letter-scrlttr2 = letter-scrlttr2;
+          pandoc = pandoc;
         };
       });
 }

@@ -16,18 +16,6 @@
         "type": "github"
       }
     },
-    "benedicdudel-pandoc-letter": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-LTrcox3yQjhy7f6niZYj4q4RoMd8M0gy3ZbS/B6mS3Y=",
-        "type": "file",
-        "url": "https://github.com/benedictdudel/pandoc-letter-din5008"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://github.com/benedictdudel/pandoc-letter-din5008"
-      }
-    },
     "flake-utils": {
       "locked": {
         "lastModified": 1667395993,
@@ -43,13 +31,26 @@
         "type": "github"
       }
     },
+    "jenserat-pandoc-scrlttr2": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1671805452,
+        "narHash": "sha256-oGNc/zfU32gwjKEchsyyPNtyIAzJDHoN8FnKLRaYbl0=",
+        "path": "/home/pol/Code/drupol/pandoc-scrlttr2",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/pol/Code/drupol/pandoc-scrlttr2",
+        "type": "path"
+      }
+    },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1670681895,
-        "narHash": "sha256-kZH9DSU36W4fn1z81a/24JCGkU517TcY50VE0RFJ9k4=",
+        "lastModified": 1671728284,
+        "narHash": "sha256-u5Tlz4bl2vb9CB+L/A/Xp8F32062vo3K6yl7J9FBXdc=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "f82f0ec1b70b2879c3f3d9a1015a05c73a90a17c",
+        "rev": "7ba7b4599367c07f2f5d1e26151b68a71a1336b2",
         "type": "github"
       },
       "original": {
@@ -62,8 +63,8 @@
     "root": {
       "inputs": {
         "aaronwolen-pandoc-letter": "aaronwolen-pandoc-letter",
-        "benedicdudel-pandoc-letter": "benedicdudel-pandoc-letter",
         "flake-utils": "flake-utils",
+        "jenserat-pandoc-scrlttr2": "jenserat-pandoc-scrlttr2",
         "nixpkgs": "nixpkgs"
       }
     }

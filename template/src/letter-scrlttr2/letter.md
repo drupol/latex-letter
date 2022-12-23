@@ -1,34 +1,62 @@
 ---
+classoption:
+ - parskip=half
+ - foldmarks=true
+ - foldmarks=BTm
+ - fromalign=right
+ - version=last
+letteroption:
+ - DIN
+lang: en
+title: title
+subject: "Subject: subject"
 author:
-  - John Doe
-opening: "A l'attention du directeur"
-closing:
-  "Veuillez agréer, Monsieur le directeur, l'expression de notre parfaite
-  considération."
-date: 29 Novembre 2022
-address:
-  - Hôtel de Ville
-  - Grand Place
+  - Author1
+  - Author2
+yourref: "#0123456789"
+yourmail: "yourmail"
+customer: customer
+invoice: invoice
+date: 23 December 2022
+place: Bruxelles # Visible only when `yourref` is not set
+frombank: YourMoneyGone
+fromname: Pol Dellaiera
+fromaddress:
+  - 1, Avenue de Rome
   - 1000 Bruxelles
-return-address:
-  - John Doe
-  - Via del Corso
-  - 00186 Roma RM, Italy
+fromzipcode: 1000
+fromfax: +32 0321 654 987
+frommobilephone: +32 0987 654 321
+fromphone: +32 0123 456 789
+fromurl: "https://not-a-number.io"
+fromemail: pol.dellaiera@protonmail.com
+fromlogo: ./src/letter-scrlttr2/logo.pdf
+fromlogo-width: 6cm
+to: Santa Claus
+toaddress:
+  - Hôtel de Ville
+  - 1, Grand Place
+  - 1000 Bruxelles
+opening: "Dear sir,"
+closing: Sincerely,
+ps: "PS: this is a post-scriptum"
+encl: Excerpt from the articles governing general meetings
+cc:
+  - cc1
+  - cc2
+signature: ./src/letter-scrlttr2/signature.pdf
+signature-width: 6cm
+signature-before: 0ex
+signature-after: 0ex
+fontfamily: garamondlibre
 fontsize: 12pt
 papersize: A4
 geometry: margin=3cm
 blockquote: true
-signature: ./src/letter1/signature.pdf
-signature-width: 7cm
-signature-before: 0ex
-signature-after: 0ex
-closing-indentation: 0em
 links-as-notes: true
 colorlinks: false
-fontfamily: garamondlibre
+graphics: true
 ...
-
-Bonjour monsieur,
 
 **Lorem ipsum dolor sit amet**, consectetur adipiscing elit. Mauris facilisis
 felis justo, eget tincidunt urna cursus a. Duis in nibh ac metus pellentesque
@@ -71,8 +99,6 @@ Gummi bears soufflé donut jelly-o liquorice chocolate cake donut gummi bears.
 Powder marzipan gummi bears brownie muffin chupa chups biscuit muffin. Oat cake
 marshmallow croissant tootsie roll oat cake. Sweet roll tootsie roll caramels
 caramels wafer muffin.
-
-\clearpage
 
 Markdown format features overview
 
@@ -127,8 +153,6 @@ A term definition
 ultracrépidarianisme
 : Comportement qui consiste à donner son avis sur des sujets à propos desquels
 on n'a pas de compétence.
-
-\clearpage
 
 A table
 

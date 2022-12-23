@@ -37,13 +37,15 @@ jobs:
             - name: Build letter
               run: |
                 nix build .#letter --quiet
-                cp result/letter1.pdf letter1.pdf
+                cp result/letter.pdf letter.pdf
+                nix build .#letter-scrlttr2 --quiet
+                cp result/letter-scrlttr2.pdf letter-scrlttr2.pdf
 
             - name: Upload build assets
               uses: actions/upload-artifact@v3
               with:
                 name: assets
-                path: letter1.pdf
+                path: *.pdf
 
     release:
         name: "Create tag/pre-release"
@@ -81,6 +83,16 @@ jobs:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
                 upload_url: ${{ needs.release.outputs.upload_url }}
-                asset_path: assets/letter1.pdf
-                asset_name: ${{ github.run_number }}--letter1--${{ needs.dependencies.outputs.version }}.pdf
+                asset_path: assets/letter.pdf
+                asset_name: ${{ github.run_number }}--letter--${{ needs.dependencies.outputs.version }}.pdf
+                asset_content_type: application/pdf
+
+            - name: Upload release assets
+              uses: actions/upload-release-asset@v1
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                upload_url: ${{ needs.release.outputs.upload_url }}
+                asset_path: assets/letter-scrlttr2.pdf
+                asset_name: ${{ github.run_number }}--letter-scrlttr2--${{ needs.dependencies.outputs.version }}.pdf
                 asset_content_type: application/pdf
