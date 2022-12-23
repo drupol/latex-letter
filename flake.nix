@@ -8,9 +8,13 @@
       url = "github:aaronwolen/pandoc-letter";
       flake = false;
     };
+    benedicdudel-pandoc-letter = {
+      url = "https://github.com/benedictdudel/pandoc-letter-din5008";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs, flake-utils, aaronwolen-pandoc-letter, ... }@inputs:
+  outputs = { self, nixpkgs, flake-utils, aaronwolen-pandoc-letter, benedicdudel-pandoc-letter, ... }@inputs:
     let
       overlay = nixpkgs: final: prev: {
         pandoc-letter-template = final.stdenvNoCC.mkDerivation {
@@ -21,7 +25,21 @@
           installPhase = ''
             runHook preInstall
 
-            install -m644 -D $src/template-letter.tex --target $out/share/pandoc/templates/
+            install -m644 -D $src/template-letter.tex --target $out/share/pandoc/templates/letter.tex
+
+            runHook postInstall
+          '';
+        };
+
+        pandoc-letter-din5008-template = final.stdenvNoCC.mkDerivation {
+          name = "pandoc-letter-din5008-template";
+          src = benedicdudel-pandoc-letter;
+          dontBuild = true;
+
+          installPhase = ''
+            runHook preInstall
+
+            install -m644 -D $src/letter.latex --target $out/share/pandoc/templates/letter-din5008.tex
 
             runHook postInstall
           '';
@@ -81,18 +99,35 @@
             runHook postInstall
           '';
         };
+
+        letter-din5008 = pkgs.stdenvNoCC.mkDerivation {
+          name = "latex-letter-din5008";
+
+          src = pkgs.lib.cleanSource ./.;
+
+          buildInputs = [
+            tex
+            pandoc
+            pkgs.gnumake
+          ];
+
+          buildPhase = ''
+            make -C template build-letter-din5008
+          '';
+
+          installPhase = ''
+            runHook preInstall
+
+            install -m644 -D template/*.pdf --target $out/
+
+            runHook postInstall
+          '';
+        };
       in
       {
         packages = {
-          default = pkgs.writeShellApplication {
-            name = "latex-letter-app";
-            text = ''
-              ${pandoc}/bin/pandoc -s --template=template-letter.tex -o letter.pdf "$@"
-            '';
-            runtimeInputs = [ tex ];
-          };
-
           letter = letter;
+          letter-din5008 = letter-din5008;
 
           pandoc = pandoc;
         };
@@ -108,7 +143,5 @@
             pkgs.nixfmt
           ];
         };
-
-        checks.default = letter;
       });
 }

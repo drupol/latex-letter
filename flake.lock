@@ -16,6 +16,18 @@
         "type": "github"
       }
     },
+    "benedicdudel-pandoc-letter": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-LTrcox3yQjhy7f6niZYj4q4RoMd8M0gy3ZbS/B6mS3Y=",
+        "type": "file",
+        "url": "https://github.com/benedictdudel/pandoc-letter-din5008"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/benedictdudel/pandoc-letter-din5008"
+      }
+    },
     "flake-utils": {
       "locked": {
         "lastModified": 1667395993,
@@ -50,6 +62,7 @@
     "root": {
       "inputs": {
         "aaronwolen-pandoc-letter": "aaronwolen-pandoc-letter",
+        "benedicdudel-pandoc-letter": "benedicdudel-pandoc-letter",
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs"
       }
