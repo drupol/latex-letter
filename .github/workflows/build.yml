@@ -39,7 +39,7 @@ jobs:
                 nix build .#letter --quiet
                 cp result/letter.pdf letter.pdf
                 nix build .#letter-scrlttr2 --quiet
-                cp result/letter-scrlttr2.pdf letter-scrlttr2.pdf
+                cp result/letter.pdf letter-scrlttr2.pdf
 
             - name: Upload build assets
               uses: actions/upload-artifact@v3
