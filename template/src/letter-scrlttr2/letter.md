@@ -1,15 +1,16 @@
 ---
 classoption:
  - parskip=half
- - foldmarks=true
- - foldmarks=BTm
+ - foldmarks=false
+# - foldmarks=vpmBT
  - fromalign=right
  - version=last
+ - subject=beforeopening,underlined,titled
 letteroption:
  - DIN
 lang: en
 title: title
-subject: "Subject: subject"
+subject: "Here's the subject"
 author:
   - Author1
   - Author2
