@@ -160,6 +160,7 @@
       packages = {
         letter = letter;
         letter-scrlttr2 = letter-scrlttr2;
+        pandoc-templates = pandoc-templates;
       };
 
       # Nix develop
@@ -177,7 +178,7 @@
       checks = {
         letter = letter;
         letter-scrlttr2 = letter-scrlttr2;
-        pandoc = pandoc;
+        pandoc-templates = pandoc-templates;
       };
     });
 }
