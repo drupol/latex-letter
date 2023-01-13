@@ -1,5 +1,5 @@
 {
-  description = "Pandoc letters";
+  description = "Pandoc and LaTeX letters";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
@@ -14,25 +14,17 @@
     };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    flake-utils,
-    pandoc-letter,
-    pandoc-scrlttr2,
-    ...
-  } @ inputs: let
+  outputs = inputs: let
     overlay = nixpkgs: final: prev: {
       pandoc-letter-template = final.stdenvNoCC.mkDerivation {
         name = "pandoc-letter-template";
-        src = pandoc-letter;
+        src = inputs.pandoc-letter;
         dontBuild = true;
 
         installPhase = ''
           runHook preInstall
 
-          mkdir -p $out/share/pandoc/templates/
-          cp $src/template-letter.tex $out/share/pandoc/templates/letter.tex
+          install -m644 -D $src/template-letter.tex $out/share/pandoc/templates/letter.tex
 
           runHook postInstall
         '';
@@ -40,14 +32,13 @@
 
       pandoc-letter-scrlttr2-template = final.stdenvNoCC.mkDerivation {
         name = "pandoc-letter-scrlttr2-template";
-        src = pandoc-scrlttr2;
+        src = inputs.pandoc-scrlttr2;
         dontBuild = true;
 
         installPhase = ''
           runHook preInstall
 
-          mkdir -p $out/share/pandoc/templates/
-          cp $src/scrlttr2.latex $out/share/pandoc/templates/scrlttr2.tex
+          install -m644 -D $src/scrlttr2.latex $out/share/pandoc/templates/scrlttr2.tex
 
           runHook postInstall
         '';
@@ -55,7 +46,7 @@
     };
   in
     {
-      overlays.default = overlay nixpkgs;
+      overlays.default = overlay inputs.nixpkgs;
 
       # nix flake new --template templates#default ./my-new-document
       templates.default = {
@@ -63,10 +54,10 @@
         description = "A template for creating beautiful letters with Pandoc.";
       };
     }
-    // flake-utils.lib.eachDefaultSystem (system: let
-      pkgs = import nixpkgs {
+    // inputs.flake-utils.lib.eachDefaultSystem (system: let
+      pkgs = import inputs.nixpkgs {
         overlays = [
-          self.overlays.default
+          inputs.self.overlays.default
         ];
         inherit system;
       };
@@ -87,9 +78,9 @@
       pandoc = pkgs.writeShellApplication {
         name = "pandoc";
         text = ''
-          ${pkgs.pandoc}/bin/pandoc --data-dir=${pandoc-templates}/share/pandoc/ "$@"
+          pandoc --data-dir=${pandoc-templates}/share/pandoc/ "$@"
         '';
-        runtimeInputs = [tex];
+        runtimeInputs = [tex pkgs.pandoc];
       };
 
       letter = pkgs.stdenvNoCC.mkDerivation {
@@ -143,25 +134,25 @@
       formatter = pkgs.alejandra;
 
       apps = {
-        pandoc = flake-utils.lib.mkApp {
+        pandoc = inputs.flake-utils.lib.mkApp {
           drv = pandoc;
         };
-        letter = flake-utils.lib.mkApp {
+        letter = inputs.flake-utils.lib.mkApp {
           drv = pkgs.writeShellApplication {
             name = "pandoc-letter-app";
             text = ''
-              ${pandoc}/bin/pandoc -s --template=letter.tex "$@"
+              pandoc -s --template=${pandoc-templates}/share/pandoc/letter.tex "$@"
             '';
-            runtimeInputs = [tex];
+            runtimeInputs = [tex pkgs.pandoc];
           };
         };
-        letter-scrlttr2 = flake-utils.lib.mkApp {
+        letter-scrlttr2 = inputs.flake-utils.lib.mkApp {
           drv = pkgs.writeShellApplication {
             name = "pandoc-letter-scrlttr2-app";
             text = ''
-              ${pandoc}/bin/pandoc -s --template=scrlttr2.tex "$@"
+              pandoc -s --template=${pandoc-templates}/share/pandoc/scrlttr2.tex "$@"
             '';
-            runtimeInputs = [tex];
+            runtimeInputs = [tex pkgs.pandoc];
           };
         };
       };
