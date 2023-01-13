@@ -77,35 +77,43 @@ To use it in your own package, here's a minimum working example:
     latex-letter.url = "github:drupol/latex-letter";
   };
 
-  outputs = { self, nixpkgs, flake-utils, latex-letter, ... }:
-    flake-utils.lib.eachDefaultSystem (system:
-      let
-        pkgs = import nixpkgs {
-          overlays = [
-            latex-letter.overlays.default
-          ];
+  outputs = inputs:
+    inputs.flake-utils.lib.eachDefaultSystem (system: let
+      pkgs = import inputs.nixpkgs {
+        overlays = [inputs.latex-letter.overlays.default];
 
-          inherit system;
-        };
+        inherit system;
+      };
 
-        tex = pkgs.texlive.combine {
-          inherit (pkgs.texlive) scheme-full latex-bin latexmk;
-        };
+      tex = pkgs.texlive.combine {
+        inherit (pkgs.texlive) scheme-full latex-bin latexmk;
+      };
 
-        pandoc = pkgs.writeShellScriptBin "pandoc" ''
-          ${pkgs.pandoc}/bin/pandoc --data-dir ${pkgs.pandoc-letter-template}/share/pandoc/ $@
+      pandoc-templates = pkgs.symlinkJoin {
+        name = "pandoc-templates";
+
+        paths = [
+          pkgs.pandoc-letter-scrlttr2-template
+          pkgs.pandoc-letter-template
+        ];
+      };
+
+      pandoc = pkgs.writeShellApplication {
+        name = "pandoc";
+        text = ''
+          pandoc --data-dir=${pandoc-templates}/share/pandoc/ "$@"
         '';
-      in
-      {
-        devShells.default = pkgs.mkShellNoCC {
-          name = "latex-letter-devshell";
+        runtimeInputs = [tex pkgs.pandoc];
+      };
+    in {
+      formatter = pkgs.alejandra;
 
-          buildInputs = [
-            tex
-            pandoc
-          ];
-        };
-      });
+      devShells.default = pkgs.mkShellNoCC {
+        name = "latex-letter-devshell";
+
+        buildInputs = [pandoc];
+      };
+    });
 }
 ```
 
