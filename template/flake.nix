@@ -55,7 +55,7 @@
             --standalone \
             --template=${pkgs.pandoc-templates}/share/pandoc/templates/letter.tex \
             -o letter.pdf \
-            $src/template/src/letter/*.md
+            $src/src/letter/*.md
 
           runHook postBuild
         '';
@@ -85,7 +85,7 @@
             --standalone \
             --template=${pkgs.pandoc-templates}/share/pandoc/templates/letter.tex \
             -o letter.pdf \
-            $src/template/src/letter-scrlttr2/*.md
+            $src/src/letter-scrlttr2/*.md
 
           runHook postBuild
         '';
