@@ -78,9 +78,11 @@
       pandoc = pkgs.writeShellApplication {
         name = "pandoc";
         text = ''
-          pandoc --data-dir=${pandoc-templates}/share/pandoc/ "$@"
+          ${pkgs.pandoc} \
+            --data-dir=${pandoc-templates}/share/pandoc/ \
+            "$@"
         '';
-        runtimeInputs = [tex pkgs.pandoc];
+        runtimeInputs = [tex];
       };
 
       letter = pkgs.stdenvNoCC.mkDerivation {
@@ -88,20 +90,26 @@
 
         src = pkgs.lib.cleanSource ./.;
 
-        buildInputs = [
-          tex
-          pandoc
-          pkgs.gnumake
-        ];
+        buildInputs = [ tex ];
+
+        TEXINPUTS = "$src/template/src//:";
 
         buildPhase = ''
-          make -C template build-letter
+          runHook preBuild
+
+        	${pkgs.pandoc}/bin/pandoc \
+            --standalone \
+            --template=${pandoc-templates}/share/pandoc/templates/letter.tex \
+            -o letter.pdf \
+            $src/template/src/letter/*.md
+
+          runHook postBuild
         '';
 
         installPhase = ''
           runHook preInstall
 
-          install -m644 -D template/*.pdf --target $out/
+          install -m644 -D *.pdf --target $out/
 
           runHook postInstall
         '';
@@ -112,20 +120,26 @@
 
         src = pkgs.lib.cleanSource ./.;
 
-        buildInputs = [
-          tex
-          pandoc
-          pkgs.gnumake
-        ];
+        TEXINPUTS = "$src/template/src//:";
+
+        buildInputs = [ tex ];
 
         buildPhase = ''
-          make -C template build-letter-scrlttr2
+          runHook preBuild
+
+        	${pkgs.pandoc}/bin/pandoc \
+            --standalone \
+            --template=${pandoc-templates}/share/pandoc/templates/scrlttr2.tex \
+            -o letter.pdf \
+            $src/template/src/letter-scrlttr2/*.md
+
+          runHook postBuild
         '';
 
         installPhase = ''
           runHook preInstall
 
-          install -m644 -D template/*.pdf --target $out/
+          install -m644 -D *.pdf --target $out/
 
           runHook postInstall
         '';
@@ -141,18 +155,24 @@
           drv = pkgs.writeShellApplication {
             name = "pandoc-letter-app";
             text = ''
-              pandoc -s --template=${pandoc-templates}/share/pandoc/letter.tex "$@"
+              ${pkgs.pandoc}/bin/pandoc \
+                --standalone \
+                --template=${pandoc-templates}/share/pandoc/templates/letter.tex \
+                "$@"
             '';
-            runtimeInputs = [tex pkgs.pandoc];
+            runtimeInputs = [tex];
           };
         };
         letter-scrlttr2 = inputs.flake-utils.lib.mkApp {
           drv = pkgs.writeShellApplication {
             name = "pandoc-letter-scrlttr2-app";
             text = ''
-              pandoc -s --template=${pandoc-templates}/share/pandoc/scrlttr2.tex "$@"
+              ${pkgs.pandoc}/bin/pandoc \
+                --standalone \
+                --template=${pandoc-templates}/share/pandoc/templates/scrlttr2.tex \
+                "$@"
             '';
-            runtimeInputs = [tex pkgs.pandoc];
+            runtimeInputs = [tex];
           };
         };
       };
@@ -170,8 +190,6 @@
           tex
           pandoc
           pkgs.nodePackages.prettier
-          pkgs.nixpkgs-fmt
-          pkgs.nixfmt
         ];
       };
 

@@ -31,7 +31,7 @@ frommobilephone: +32 0987 654 321
 fromphone: +32 0123 456 789
 fromurl: "https://not-a-number.io"
 fromemail: pol.dellaiera@protonmail.com
-fromlogo: ./src/letter-scrlttr2/logo.pdf
+fromlogo: logo.pdf
 fromlogo-width: 6cm
 to: Santa Claus
 toaddress:
@@ -45,7 +45,7 @@ encl: Excerpt from the articles governing general meetings
 cc:
   - cc1
   - cc2
-signature: ./src/letter-scrlttr2/signature.pdf
+signature: signature.pdf
 signature-width: 6cm
 signature-before: 0ex
 signature-after: 0ex

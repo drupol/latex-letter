@@ -17,8 +17,6 @@
     ...
   } @ inputs:
     flake-utils.lib.eachDefaultSystem (system: let
-      version = self.shortRev or self.lastModifiedDate;
-
       pkgs = import nixpkgs {
         inherit system;
 
@@ -34,7 +32,9 @@
       pandoc = pkgs.writeShellApplication {
         name = "pandoc";
         text = ''
-          ${pkgs.pandoc}/bin/pandoc --data-dir=${pkgs.pandoc-letter-template}/share/pandoc/ "$@"
+          ${pkgs.pandoc}/bin/pandoc \
+            --data-dir=${pkgs.pandoc-letter-template}/share/pandoc/ \
+            "$@"
         '';
         runtimeInputs = [tex];
       };
@@ -44,13 +44,20 @@
 
         src = pkgs.lib.cleanSource ./.;
 
-        nativeBuildInputs = [
-          pandoc
-          tex
-        ];
+        nativeBuildInputs = [ tex ];
 
-        build = ''
-          make build-letter
+        TEXINPUTS = "$src/src//:";
+
+        buildPhase = ''
+          runHook preBuild
+
+        	${pkgs.pandoc}/bin/pandoc \
+            --standalone \
+            --template=${pkgs.pandoc-templates}/share/pandoc/templates/letter.tex \
+            -o letter.pdf \
+            $src/template/src/letter/*.md
+
+          runHook postBuild
         '';
 
         installPhase = ''
@@ -67,13 +74,20 @@
 
         src = pkgs.lib.cleanSource ./.;
 
-        nativeBuildInputs = [
-          pandoc
-          tex
-        ];
+        nativeBuildInputs = [ tex ];
 
-        build = ''
-          make build-letter-scrlttr2
+        TEXINPUTS = "$src/src//:";
+
+        buildPhase = ''
+          runHook preBuild
+
+        	${pkgs.pandoc}/bin/pandoc \
+            --standalone \
+            --template=${pkgs.pandoc-templates}/share/pandoc/templates/letter.tex \
+            -o letter.pdf \
+            $src/template/src/letter-scrlttr2/*.md
+
+          runHook postBuild
         '';
 
         installPhase = ''
@@ -97,9 +111,6 @@
         buildInputs = [
           tex
           pandoc
-          pkgs.gnumake
-          pkgs.nixpkgs-fmt
-          pkgs.nixfmt
         ];
       };
     });
