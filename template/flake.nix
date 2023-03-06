@@ -44,20 +44,20 @@
 
         src = pkgs.lib.cleanSource ./.;
 
-        nativeBuildInputs = [ tex ];
+        nativeBuildInputs = [tex];
 
         TEXINPUTS = "$src/src//:";
 
         buildPhase = ''
-          runHook preBuild
+           runHook preBuild
 
-        	${pkgs.pandoc}/bin/pandoc \
-            --standalone \
-            --template=${pkgs.pandoc-templates}/share/pandoc/templates/letter.tex \
-            -o letter.pdf \
-            $src/src/letter/*.md
+          ${pkgs.pandoc}/bin/pandoc \
+             --standalone \
+             --template=${pkgs.pandoc-templates}/share/pandoc/templates/letter.tex \
+             -o letter.pdf \
+             $src/src/letter/*.md
 
-          runHook postBuild
+           runHook postBuild
         '';
 
         installPhase = ''
@@ -74,20 +74,20 @@
 
         src = pkgs.lib.cleanSource ./.;
 
-        nativeBuildInputs = [ tex ];
+        nativeBuildInputs = [tex];
 
         TEXINPUTS = "$src/src//:";
 
         buildPhase = ''
-          runHook preBuild
+           runHook preBuild
 
-        	${pkgs.pandoc}/bin/pandoc \
-            --standalone \
-            --template=${pkgs.pandoc-templates}/share/pandoc/templates/letter.tex \
-            -o letter.pdf \
-            $src/src/letter-scrlttr2/*.md
+          ${pkgs.pandoc}/bin/pandoc \
+             --standalone \
+             --template=${pkgs.pandoc-templates}/share/pandoc/templates/letter.tex \
+             -o letter.pdf \
+             $src/src/letter-scrlttr2/*.md
 
-          runHook postBuild
+           runHook postBuild
         '';
 
         installPhase = ''
