@@ -17,9 +17,12 @@ You have two options:
 
 1. Do not start a full project and use `nix run` to compile a PDF from a
    Markdown file:
-   1. `nix run github:drupol/latex-letter#letter -- /path/to/letter.md -o letter.pdf`
-   2. `nix run github:drupol/latex-letter#letter-scrlttr2 -- /path/to/letter.md -o letter.pdf`
-2. Scaffold a full project from a default template:
+   1. `nix run github:drupol/latex-letter#letter -- --output=letter.pdf --from=markdown /path/to/letter.md`
+   2. `nix run github:drupol/latex-letter#letter-scrlttr2 -- --output=letter.pdf --from=markdown /path/to/letter.md`
+2. Watch a markdown letter for changes and build on-the-go:
+   1. `nix run github:drupol/latex-letter#watch-letter -- --output=letter.pdf --from=markdown /path/to/letter.md`
+   2. `nix run github:drupol/latex-letter#watch-letter-scrlttr2 -- --output=letter.pdf --from=markdown /path/to/letter.md`
+3. Scaffold a full project from a default template:
    `nix flake new --template github:drupol/latex-letter#default ./my-new-document`
 
 ## Usage

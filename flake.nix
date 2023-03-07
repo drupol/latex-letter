@@ -74,7 +74,12 @@
         };
 
         tex = pkgs.texlive.combine {
-          inherit (pkgs.texlive) scheme-full latex-bin latexmk;
+          inherit (pkgs.texlive)
+            scheme-full
+            latex-bin
+            latexmk
+            lettrine
+            ;
         };
 
         pandoc-templates = pkgs.symlinkJoin {
@@ -96,27 +101,34 @@
           runtimeInputs = [tex];
         };
 
+        pandoc-letter-app = pkgs.writeShellApplication {
+          name = "pandoc-letter-app";
+          text = ''
+            ${pkgs.pandoc}/bin/pandoc \
+              --to=latex \
+              --standalone \
+              --template=${pandoc-templates}/share/pandoc/templates/letter.tex \
+              "$@"
+          '';
+          runtimeInputs = [tex];
+        };
+
         letter = pkgs.stdenvNoCC.mkDerivation {
           name = "latex-letter";
 
           src = pkgs.lib.cleanSource ./.;
 
-          buildInputs = [tex];
-
-          TEXINPUTS = "$src/template/src//:";
+          TEXINPUTS="${./.}//:";
 
           buildPhase = ''
-             runHook preBuild
+            runHook preBuild
 
-            ${pkgs.pandoc}/bin/pandoc \
-               --standalone \
-               --template=${pandoc-templates}/share/pandoc/templates/letter.tex \
-               --output=letter.pdf \
-               --from=markdown \
-               --to=latex \
-               $src/template/src/letter/*.md
+            ${pandoc-letter-app}/bin/pandoc-letter-app \
+              --output=letter.pdf \
+              --from=markdown \
+              $src/template/src/letter/*.md
 
-             runHook postBuild
+            runHook postBuild
           '';
 
           installPhase = ''
@@ -128,27 +140,34 @@
           '';
         };
 
+        pandoc-letter-scrlttr2-app = pkgs.writeShellApplication {
+          name = "pandoc-letter-scrlttr2-app";
+          text = ''
+            ${pkgs.pandoc}/bin/pandoc \
+              --to=latex \
+              --standalone \
+              --template=${pandoc-templates}/share/pandoc/templates/scrlttr2.tex \
+              "$@"
+          '';
+          runtimeInputs = [tex];
+        };
+
         letter-scrlttr2 = pkgs.stdenvNoCC.mkDerivation {
           name = "latex-letter-scrlttr2";
 
           src = pkgs.lib.cleanSource ./.;
 
-          TEXINPUTS = "$src/template/src//:";
-
-          buildInputs = [tex];
+          TEXINPUTS="${./.}//:";
 
           buildPhase = ''
-             runHook preBuild
+            runHook preBuild
 
-            ${pkgs.pandoc}/bin/pandoc \
-               --standalone \
-               --template=${pandoc-templates}/share/pandoc/templates/scrlttr2.tex \
-               --from=markdown \
-               --to=latex \
-               --output=letter.pdf \
-               $src/template/src/letter-scrlttr2/*.md
+            ${pandoc-letter-scrlttr2-app}/bin/pandoc-letter-scrlttr2-app \
+              --from=markdown \
+              --output=letter.pdf \
+              $src/template/src/letter-scrlttr2/*.md
 
-             runHook postBuild
+            runHook postBuild
           '';
 
           installPhase = ''
@@ -157,6 +176,38 @@
             install -m644 -D *.pdf --target $out/
 
             runHook postInstall
+          '';
+        };
+
+        watch-letter-app = pkgs.writeShellApplication {
+          name = "watch-letter-app";
+          text = ''
+            export TEXINPUTS="${./.}//:"
+
+            echo "Now watching for changes and building it..."
+
+            while true; do \
+              ${pandoc-letter-app}/bin/pandoc-letter-app \
+                "$@"
+
+              ${pkgs.inotify-tools}/bin/inotifywait --exclude '\.pdf|\.git' -qre close_write .; \
+            done
+          '';
+        };
+
+        watch-letter-scrlttr2-app = pkgs.writeShellApplication {
+          name = "watch-letter-scrlttr2-app";
+          text = ''
+            export TEXINPUTS="${./.}//:"
+
+            echo "Now watching for changes and building it..."
+
+            while true; do \
+              ${pandoc-letter-scrlttr2-app}/bin/pandoc-letter-scrlttr2-app \
+                "$@"
+
+              ${pkgs.inotify-tools}/bin/inotifywait --exclude '\.pdf|\.git' -qre close_write .; \
+            done
           '';
         };
       in {
@@ -169,31 +220,19 @@
           };
           letter = {
             type = "app";
-            program = (pkgs.writeShellApplication {
-              name = "pandoc-letter-app";
-              text = ''
-                ${pkgs.pandoc}/bin/pandoc \
-                  --to=latex \
-                  --standalone \
-                  --template=${pandoc-templates}/share/pandoc/templates/letter.tex \
-                  "$@"
-              '';
-              runtimeInputs = [tex];
-            }) + ''/bin/pandoc-letter-app'';
+            program = "${pandoc-letter-app}/bin/pandoc-letter-app";
           };
           letter-scrlttr2 = {
             type = "app";
-            program = (pkgs.writeShellApplication {
-              name = "pandoc-letter-scrlttr2-app";
-              text = ''
-                ${pkgs.pandoc}/bin/pandoc \
-                  --to=latex \
-                  --standalone \
-                  --template=${pandoc-templates}/share/pandoc/templates/scrlttr2.tex \
-                  "$@"
-              '';
-              runtimeInputs = [tex];
-            }) + ''/bin/pandoc-letter-scrlttr2-app'';
+            program = "${pandoc-letter-scrlttr2-app}/bin/pandoc-letter-scrlttr2-app";
+          };
+          watch-letter = {
+            type = "app";
+            program = "${watch-letter-app}/bin/watch-letter-app";
+          };
+          watch-letter-scrlttr2 = {
+            type = "app";
+            program = "${watch-letter-scrlttr2-app}/bin/watch-letter-scrlttr2-app";
           };
         };
 
