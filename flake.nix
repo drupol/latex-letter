@@ -216,23 +216,23 @@
         apps = {
           pandoc = {
             type = "app";
-            program = "${pandoc}/bin/pandoc";
+            program = pandoc;
           };
           letter = {
             type = "app";
-            program = "${pandoc-letter-app}/bin/pandoc-letter-app";
+            program = pandoc-letter-app;
           };
           letter-scrlttr2 = {
             type = "app";
-            program = "${pandoc-letter-scrlttr2-app}/bin/pandoc-letter-scrlttr2-app";
+            program = pandoc-letter-scrlttr2-app;
           };
           watch-letter = {
             type = "app";
-            program = "${watch-letter-app}/bin/watch-letter-app";
+            program = watch-letter-app;
           };
           watch-letter-scrlttr2 = {
             type = "app";
-            program = "${watch-letter-scrlttr2-app}/bin/watch-letter-scrlttr2-app";
+            program = watch-letter-scrlttr2-app;
           };
         };
 
