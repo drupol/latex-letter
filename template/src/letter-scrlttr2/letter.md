@@ -57,9 +57,11 @@ blockquote: true
 links-as-notes: true
 colorlinks: false
 graphics: true
+header-includes: |
+  \usepackage{lettrine}
 ...
 
-**Lorem ipsum dolor sit amet**, consectetur adipiscing elit. Mauris facilisis
+\lettrine{L}{orem} ipsum dolor sit amet, consectetur adipiscing elit. Mauris facilisis
 felis justo, eget tincidunt urna cursus a. Duis in nibh ac metus pellentesque
 tristique.
 

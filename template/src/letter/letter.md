@@ -26,13 +26,15 @@ closing-indentation: 0em
 links-as-notes: true
 colorlinks: false
 fontfamily: garamondlibre
+header-includes: |
+  \usepackage{lettrine}
 ...
 
 Bonjour monsieur,
 
-**Lorem ipsum dolor sit amet**, consectetur adipiscing elit. Mauris facilisis
-felis justo, eget tincidunt urna cursus a. Duis in nibh ac metus pellentesque
-tristique.
+\lettrine{L}{orem} ipsum dolor sit amet, consectetur adipiscing elit. Mauris
+facilisis felis justo, eget tincidunt urna cursus a. Duis in nibh ac metus
+pellentesque tristique.
 
 Jolly boat keelhaul Jack Tar grog yardarm squiffy chase guns yo-ho-ho hands
 sheet. Six pounders me ahoy pirate spanker gally yo-ho-ho league scallywag Gold
@@ -124,9 +126,8 @@ A code example
 
 A term definition
 
-ultracrépidarianisme
-: Comportement qui consiste à donner son avis sur des sujets à propos desquels
-on n'a pas de compétence.
+ultracrépidarianisme : Comportement qui consiste à donner son avis sur des
+sujets à propos desquels on n'a pas de compétence.
 
 \clearpage
 
