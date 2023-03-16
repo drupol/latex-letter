@@ -4,6 +4,7 @@ classoption:
  - foldmarks=false
 # - foldmarks=vpmBT
  - fromalign=right
+ - fromlogo
  - version=last
  - subject=beforeopening,underlined,titled
 letteroption:
