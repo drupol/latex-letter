@@ -16,8 +16,7 @@
   outputs = inputs @ {flake-parts, ...}:
     flake-parts.lib.mkFlake {inherit inputs;} {
       systems = inputs.nixpkgs.lib.systems.flakeExposed;
-      imports = [
-      ];
+
       flake = let
         overlay = nixpkgs: final: prev: {
           pandoc-letter-template = final.stdenvNoCC.mkDerivation {
@@ -187,9 +186,7 @@
             echo "Now watching for changes and building it..."
 
             while true; do \
-              ${pandoc-letter-app}/bin/pandoc-letter-app \
-                "$@"
-
+              ${pandoc-letter-app}/bin/pandoc-letter-app "$@"
               ${pkgs.inotify-tools}/bin/inotifywait --exclude '\.pdf|\.git' -qre close_write .; \
             done
           '';
@@ -203,9 +200,7 @@
             echo "Now watching for changes and building it..."
 
             while true; do \
-              ${pandoc-letter-scrlttr2-app}/bin/pandoc-letter-scrlttr2-app \
-                "$@"
-
+              ${pandoc-letter-scrlttr2-app}/bin/pandoc-letter-scrlttr2-app "$@"
               ${pkgs.inotify-tools}/bin/inotifywait --exclude '\.pdf|\.git' -qre close_write .; \
             done
           '';
@@ -237,9 +232,7 @@
         };
 
         packages = {
-          letter = letter;
-          letter-scrlttr2 = letter-scrlttr2;
-          pandoc-templates = pandoc-templates;
+          inherit letter letter-scrlttr2 pandoc-templates;
         };
 
         # Nix develop
