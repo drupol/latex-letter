@@ -33,7 +33,9 @@ fromurl: "https://not-a-number.io"
 fromemail: pol.dellaiera@protonmail.com
 fromlogo: logo.pdf
 fromlogo-width: 6cm
-to: Santa Claus
+to:
+  - Santa
+  - Claus
 toaddress:
   - Hôtel de Ville
   - 1, Grand Place
