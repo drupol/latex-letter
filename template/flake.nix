@@ -5,7 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
     systems.url = "github:nix-systems/default";
-    latex-letter.url = "./..";
+    latex-letter.url = "github:drupol/latex-letter";
   };
 
   outputs =
