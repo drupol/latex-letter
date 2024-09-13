@@ -3,115 +3,90 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
-    nix-filter.url = github:numtide/nix-filter;
-    latex-letter.url = "github:drupol/latex-letter";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    systems.url = "github:nix-systems/default";
+    latex-letter.url = "./..";
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    flake-utils,
-    nix-filter,
-    latex-letter,
-    ...
-  } @ inputs:
-    flake-utils.lib.eachDefaultSystem (system: let
-      pkgs = import nixpkgs {
-        inherit system;
+  outputs =
+    inputs@{ flake-parts, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = import inputs.systems;
 
-        overlays = [
-          latex-letter.overlays.default
-        ];
-      };
+      imports = [
+        ./nix/imports/pkgs.nix
+        ./nix/imports/overlay.nix
+      ];
 
-      tex = pkgs.texlive.combine {
-        inherit (pkgs.texlive) scheme-full latex-bin latexmk;
-      };
+      perSystem =
+        { pkgs, ... }:
+        let
+          tex = pkgs.texlive.combine {
+            inherit (pkgs.texlive) scheme-full latex-bin latexmk;
+          };
+        in
+        {
+          packages = {
+            letter = pkgs.stdenvNoCC.mkDerivation {
+              name = "pandoc-letter";
 
-      pandoc = pkgs.writeShellApplication {
-        name = "pandoc";
-        text = ''
-          ${pkgs.pandoc}/bin/pandoc \
-            --data-dir=${pkgs.pandoc-letter-template}/share/pandoc/ \
-            "$@"
-        '';
-        runtimeInputs = [tex];
-      };
+              src = pkgs.lib.cleanSource ./.;
 
-      letter = pkgs.stdenvNoCC.mkDerivation {
-        name = "pandoc-letter";
+              nativeBuildInputs = [ tex ];
 
-        src = pkgs.lib.cleanSource ./.;
+              TEXINPUTS = "$src/src//:";
 
-        nativeBuildInputs = [tex];
+              buildPhase = ''
+                 runHook preBuild
 
-        TEXINPUTS = "$src/src//:";
+                ${pkgs.pandoc}/bin/pandoc \
+                   --standalone \
+                   --template=${pkgs.pandoc-letter-templates}/share/pandoc/templates/letter.tex \
+                   -o letter.pdf \
+                   $src/src/letter/*.md
 
-        buildPhase = ''
-           runHook preBuild
+                 runHook postBuild
+              '';
 
-          ${pkgs.pandoc}/bin/pandoc \
-             --standalone \
-             --template=${pkgs.pandoc-templates}/share/pandoc/templates/letter.tex \
-             -o letter.pdf \
-             $src/src/letter/*.md
+              installPhase = ''
+                runHook preInstall
 
-           runHook postBuild
-        '';
+                install -m644 -D letter.pdf --target $out/
 
-        installPhase = ''
-          runHook preInstall
+                runHook postInstall
+              '';
+            };
 
-          install -m644 -D letter.pdf --target $out/
+            letter-scrlttr2 = pkgs.stdenvNoCC.mkDerivation {
+              name = "pandoc-letter-scrlttr2";
 
-          runHook postInstall
-        '';
-      };
+              src = pkgs.lib.cleanSource ./.;
 
-      letter-scrlttr2 = pkgs.stdenvNoCC.mkDerivation {
-        name = "pandoc-letter-scrlttr2";
+              nativeBuildInputs = [ tex ];
 
-        src = pkgs.lib.cleanSource ./.;
+              TEXINPUTS = "$src/src//:";
 
-        nativeBuildInputs = [tex];
+              buildPhase = ''
+                 runHook preBuild
 
-        TEXINPUTS = "$src/src//:";
+                ${pkgs.pandoc}/bin/pandoc \
+                   --standalone \
+                   --template=${pkgs.pandoc-letter-templates}/share/pandoc/templates/scrlttr2.tex \
+                   -o letter.pdf \
+                   $src/src/letter-scrlttr2/*.md
 
-        buildPhase = ''
-           runHook preBuild
+                 runHook postBuild
+              '';
 
-          ${pkgs.pandoc}/bin/pandoc \
-             --standalone \
-             --template=${pkgs.pandoc-templates}/share/pandoc/templates/letter.tex \
-             -o letter.pdf \
-             $src/src/letter-scrlttr2/*.md
+              installPhase = ''
+                runHook preInstall
 
-           runHook postBuild
-        '';
+                install -m644 -D letter.pdf --target $out/
 
-        installPhase = ''
-          runHook preInstall
-
-          install -m644 -D letter.pdf --target $out/
-
-          runHook postInstall
-        '';
-      };
-    in {
-      formatter = pkgs.alejandra;
-
-      # Nix shell / nix build
-      packages.letter = letter;
-      packages.letter-scrlttr2 = letter-scrlttr2;
-
-      # Nix develop
-      devShells.default = pkgs.mkShellNoCC {
-        name = "letter-devshell";
-        buildInputs = [
-          tex
-          pandoc
-        ];
-      };
-    });
+                runHook postInstall
+              '';
+            };
+          };
+        };
+    };
 }

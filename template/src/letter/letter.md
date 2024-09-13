@@ -1,4 +1,5 @@
 ---
+documentclass: letter
 author:
   - John Doe
 opening: "A l'attention du directeur"
@@ -28,6 +29,7 @@ colorlinks: false
 fontfamily: garamondlibre
 header-includes: |
   \usepackage{lettrine}
+  \usepackage{soul}
 ...
 
 Bonjour monsieur,
